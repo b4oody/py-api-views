@@ -1,22 +1,24 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, generics, mixins, viewsets
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cinema.models import Genre, Actor, CinemaHall, Movie
-from cinema.serializers import MovieSerializer, GenreSerializer, ActorSerializer, CinemaHallSerializer
+from cinema.serializers import (
+    MovieSerializer,
+    GenreSerializer,
+    ActorSerializer,
+    CinemaHallSerializer
+)
 
 
 class GenreList(APIView):
-    @staticmethod
-    def get(request):
+    def get(self, request):
         genre = Genre.objects.all()
         serializer = GenreSerializer(genre, many=True)
         return Response(serializer.data)
 
-    @staticmethod
-    def post(request):
+    def post(self, request):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -24,8 +26,7 @@ class GenreList(APIView):
 
 
 class GenreDetail(APIView):
-    @staticmethod
-    def get_object(pk):
+    def get_object(self, pk):
         return get_object_or_404(Genre, pk=pk)
 
     def get(self, request, pk):
