@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status, generics, mixins
+from rest_framework import status, generics, mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cinema.models import Genre, Actor, CinemaHall, Movie
-from cinema.serializers import MovieSerializer, GenreSerializer, ActorSerializer
+from cinema.serializers import MovieSerializer, GenreSerializer, ActorSerializer, CinemaHallSerializer
 
 
 class GenreList(APIView):
@@ -88,3 +88,16 @@ class ActorDetail(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class CinemaHallViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
+    queryset = CinemaHall.objects.all()
+    serializer_class = CinemaHallSerializer
+
